@@ -1,17 +1,21 @@
 spring:
   datasource:
     url: jdbc:h2:mem:testdb
-
+#СУБД
   h2:
     console:
       enabled: true
 
+#Штука чтобы запускать скрипты
+  liquibase:
+    enabled: true
+    change-log: classpath:db.changelog/db.changelog-master.xml
 
+#штука для созжания таблиц в бд с помощью аннотаций
   jpa:
-    generate-ddl: true
+    generate-ddl: false
     hibernate:
-      ddl-auto: create-drop
-
+      ddl-auto: none
     show-sql: true
 
 
