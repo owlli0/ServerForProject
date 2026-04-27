@@ -4,12 +4,13 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
 
-    <include file="db.changelog/1.0/2026-04-27--0001-Parent.xml"/>
-    <include file="db.changelog/1.0/2026-04-27-0002-Child.xml"/>
+    <changeSet id="2026-04-27--0002-Child-data" author="ssavelev">
+        <loadData tableName="child" file="db.changelog/data/csv/2026-04-27-0002-Child-data.csv"
+                  separator=";"
+                  quotchar='"'
+                  encoding="UTF-8"/>
 
-
-    <include file="db.changelog/data/2026-04-27--0001-Parent-data.xml"/>
-    <include file="db.changelog/data/2026-04-27-0002-Child-data.xml"/>
+    </changeSet>
 
 
 </databaseChangeLog>
