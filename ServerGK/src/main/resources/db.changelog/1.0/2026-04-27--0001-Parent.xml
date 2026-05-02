@@ -12,7 +12,7 @@
         </preConditions>
 
         <createTable tableName="Parent">
-            <column name="id" type="BIGINT" autoIncrement="true">
+            <column name="id_parent" type="BIGINT" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
 

@@ -3,7 +3,6 @@ package com.glucokid.server.domain;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.awt.*;
 import java.util.List;
 
 @Data
@@ -11,11 +10,12 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "Parent")
-public class Parent {
+@Table(name = "Child")
+public class Child {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @Column(name = "firstName")
     private String firstName;
 
@@ -31,6 +31,6 @@ public class Parent {
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     //Убратьрекурсию↑↑↑↑↑↑↑
-    @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL)
-    private List<ParentChild> children;
+    @OneToMany(mappedBy = "child", cascade = CascadeType.ALL)
+    private List<ParentChild> parents;
 }
