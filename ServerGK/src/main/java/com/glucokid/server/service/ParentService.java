@@ -1,14 +1,15 @@
 package com.glucokid.server.service;
 
 import com.glucokid.server.domain.Parent;
+import com.glucokid.server.dto.ParentDTO;
 
 import java.util.List;
 
 public interface ParentService {
 
-    Parent add(Parent parent);
-    List<Parent> getAll();
-    Parent getById(Long id);
-    Parent update(Long id, Parent parent);
+    ParentDTO add(ParentDTO dto);
+    List<ParentDTO> getAll();
+    ParentDTO getById(Long id);
+    ParentDTO update(Long id, ParentDTO dto);
     void deleteById(Long id);
 }

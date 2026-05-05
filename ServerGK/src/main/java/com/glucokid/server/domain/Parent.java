@@ -14,19 +14,23 @@ import java.util.List;
 @Table(name = "Parent")
 public class Parent {
     @Id
+    @Column(name = "id_parent")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "firstName")
+    @Column(name = "first_name")
     private String firstName;
 
-    @Column(name = "secondName")
+    @Column(name = "second_name")
     private String secondName;
 
-    @Column(name = "lastName")
+    @Column(name = "last_name")
     private String lastName;
 
-    @Column(name = "phoneNumber")
+    @Column(name = "phone_number")
     private String phoneNumber;
+
+    @Column(name = "password")
+    private String password;
 
     @ToString.Exclude
     @EqualsAndHashCode.Exclude

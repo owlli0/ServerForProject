@@ -13,6 +13,7 @@ import java.util.List;
 @Table(name = "Child")
 public class Child {
     @Id
+    @Column(name = "ID_child")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -28,9 +29,15 @@ public class Child {
     @Column(name = "phoneNumber")
     private String phoneNumber;
 
+    @Column(name = "password")
+    private String password;
+
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     //Убратьрекурсию↑↑↑↑↑↑↑
     @OneToMany(mappedBy = "child", cascade = CascadeType.ALL)
     private List<ParentChild> parents;
+
+    @OneToMany(mappedBy = "child", cascade = CascadeType.ALL)
+    private List<SugarLevel> sugarLevels;
 }

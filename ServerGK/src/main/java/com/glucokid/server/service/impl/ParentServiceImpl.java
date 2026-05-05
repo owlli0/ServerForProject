@@ -1,14 +1,15 @@
 package com.glucokid.server.service.impl;
 
-import com.glucokid.server.dao.ParentRepository;
 import com.glucokid.server.domain.Parent;
+import com.glucokid.server.dto.ParentDTO;
+import com.glucokid.server.repository.ParentRepository;
 import com.glucokid.server.service.ParentService;
+import com.glucokid.server.util.ParentMapper;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -17,36 +18,42 @@ public class ParentServiceImpl implements ParentService {
     private final ParentRepository parentRepository;
 
     @Override
-    public Parent add(Parent parent) {
-
-        return parentRepository.save(parent);
+    public List<ParentDTO> getAll() {
+        return parentRepository.findAll().stream()
+                .map(ParentMapper::convertToDto)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public List<Parent> getAll() {
-        return parentRepository.findAll();
+    public ParentDTO getById(Long id) {
+        return parentRepository.findById(id).map(ParentMapper::convertToDto)
+                .orElseThrow(() -> new RuntimeException("Parent not found!"));
     }
 
     @Override
-    public Parent getById(Long id) {
-        Optional<Parent> parentOptional = parentRepository.findById(id);
-        if (!parentOptional.isPresent()) throw  new RuntimeException("Parent with ID " + id + " not found");
+    public ParentDTO add(ParentDTO dto) {
 
-        return parentOptional.get();
+        Parent parent = new Parent();
+        parent.setFirstName(dto.getFirstName());
+        parent.setSecondName(dto.getSecondName());
+        parent.setLastName(dto.getLastName());
+        parent.setPhoneNumber(dto.getPhoneNumber());
+        parent.setPassword(dto.getPassword());
+
+        return ParentMapper.convertToDto(parentRepository.save(parent));
     }
 
     @Override
-    public Parent update(Long id, Parent parent) {
-        Optional<Parent> parentOptional = parentRepository.findById(id);
-        if (!parentOptional.isPresent()) throw  new RuntimeException("Parent with ID " + id + " not found");
+    public ParentDTO update(Long id, ParentDTO dto) {
+        Parent parent = parentRepository.findById(id)
+                .orElseThrow(() ->new RuntimeException("Parent with ID " + id + " not found"));
+        
+        parent.setFirstName(dto.getFirstName());
+        parent.setSecondName(dto.getSecondName());
+        parent.setLastName(dto.getLastName());
+        parent.setPhoneNumber(dto.getPhoneNumber());
 
-        Parent updateParent = parentOptional.get();
-        updateParent.setFirstName(parent.getFirstName());
-        updateParent.setSecondName(parent.getSecondName());
-        updateParent.setLastName(parent.getLastName());
-        updateParent.setPhoneNumber(parent.getPhoneNumber());
-
-        return parentRepository.save(updateParent);
+        return ParentMapper.convertToDto(parentRepository.save(parent));
     }
 
     @Override
