@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="2026-05-07--0004-SugarLvl" author="ssavelev">
+
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="sugar_lvl"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="sugar_lvl">
+            <column name="id_note_sl" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="id_child" type="BIGINT">
+                <constraints nullable="false" foreignKeyName="fk_sl_child" referencedTableName="Child" referencedColumnNames="id_child"/>
+            </column>
+            <column name="value" type="DOUBLE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="time" type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
+            <column name="extra" type="VARCHAR(500)"/>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>

@@ -6,7 +6,9 @@
 
     <include file="db.changelog/1.0/2026-04-27--0001-Parent.xml"/>
     <include file="db.changelog/1.0/2026-04-27-0002-Child.xml"/>
-
+    <include file="db.changelog/1.0/2026-05-07--0003-ParentChild.xml"/>
+    <include file="db.changelog/1.0/2026-05-07--0004-SugarLvl.xml"/>
+    <include file="db.changelog/1.0/2026-05-07--0005-ConnectionCodes.xml"/>
 
     <include file="db.changelog/data/2026-04-27--0001-Parent-data.xml"/>
     <include file="db.changelog/data/2026-04-27-0002-Child-data.xml"/>

@@ -4,6 +4,9 @@ import com.glucokid.server.domain.ParentChild;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface ParentChildRepository extends JpaRepository<ParentChild, Long> {
+    List<ParentChild> findAllByParentId(Long parentId);
 }

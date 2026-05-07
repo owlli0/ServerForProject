@@ -1,13 +1,24 @@
 package com.glucokid.server.service.impl;
 
+import com.glucokid.server.domain.Child;
+import com.glucokid.server.domain.ConnectionCode;
 import com.glucokid.server.domain.Parent;
+import com.glucokid.server.domain.ParentChild;
+import com.glucokid.server.dto.ChildDTO;
 import com.glucokid.server.dto.ParentDTO;
+import com.glucokid.server.repository.ChildRepository;
+import com.glucokid.server.repository.ConnectionCodeRepository;
+import com.glucokid.server.repository.ParentChildRepository;
 import com.glucokid.server.repository.ParentRepository;
 import com.glucokid.server.service.ParentService;
+import com.glucokid.server.util.ChildMapper;
 import com.glucokid.server.util.ParentMapper;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -16,6 +27,9 @@ import java.util.stream.Collectors;
 public class ParentServiceImpl implements ParentService {
 
     private final ParentRepository parentRepository;
+    private final ChildRepository childRepository;
+    private final ConnectionCodeRepository connectionCodeRepository;
+    private final ParentChildRepository parentChildRepository;
 
     @Override
     public List<ParentDTO> getAll() {
@@ -59,5 +73,47 @@ public class ParentServiceImpl implements ParentService {
     @Override
     public void deleteById(Long id) {
         parentRepository.deleteById(id);
+    }
+
+    @Override
+    @Transactional
+    public void connectChild(Long parentId, String code) {
+
+        ConnectionCode connectionCode = connectionCodeRepository.findByCode(code)
+                .orElseThrow(() -> new RuntimeException("Код не найден!"));
+
+        if (connectionCode.getExpiryDate().isBefore(LocalDateTime.now())) {
+            connectionCodeRepository.delete(connectionCode);
+            throw new RuntimeException("Срок действия кода истек!");
+        }
+
+        Parent parent = parentRepository.findById(parentId)
+                .orElseThrow(() -> new RuntimeException("Родитель не найден!"));
+
+        Child child = childRepository.findById(connectionCode.getChildId())
+                .orElseThrow(() -> new RuntimeException("Ребенок не найден!"));
+
+        ParentChild link = ParentChild.builder()
+                .parent(parent)
+                .child(child)
+                .build();
+
+        parentChildRepository.save(link);
+        connectionCodeRepository.delete(connectionCode);
+    }
+
+    @Override
+    public List<ChildDTO> getMyChildren(Long parentId) {
+        List<ChildDTO> childrenDtos = new ArrayList<>();
+
+        List<ParentChild> relations = parentChildRepository.findAllByParentId(parentId);
+
+        for (ParentChild relation : relations) {
+            Child child = relation.getChild();
+            ChildDTO dto = ChildMapper.convertToDto(child);
+            childrenDtos.add(dto);
+        }
+
+        return childrenDtos;
     }
 }
