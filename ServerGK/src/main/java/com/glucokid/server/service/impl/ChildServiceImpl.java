@@ -6,6 +6,7 @@ import com.glucokid.server.dto.ChildDTO;
 import com.glucokid.server.repository.ChildRepository;
 import com.glucokid.server.repository.ConnectionCodeRepository;
 import com.glucokid.server.service.ChildService;
+import com.glucokid.server.service.ConnectionCodeService;
 import com.glucokid.server.util.ChildMapper;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +22,7 @@ import java.util.stream.Collectors;
 public class ChildServiceImpl implements ChildService {
 
     private final ChildRepository childRepository;
-    private final ConnectionCodeRepository connectionCodeRepository;
+    private final ConnectionCodeService connectionCodeService;;
 
     @Override
     public ChildDTO add(ChildDTO dto) {
@@ -70,25 +71,9 @@ public class ChildServiceImpl implements ChildService {
     @Override
     @Transactional
     public String generateConnectionCode(Long childId) {
-        // 1. Проверяем, существует ли ребенок
         if (!childRepository.existsById(childId)) {
             throw new RuntimeException("Ребенок не найден!");
         }
-        // 2. Генерируем случайный 6-значный код (только цифры и заглавные буквы)
-        String characters = "0123456789";
-        SecureRandom random = new SecureRandom();
-        StringBuilder codeBuilder = new StringBuilder(6);
-        for (int i = 0; i < 6; i++) {
-            codeBuilder.append(characters.charAt(random.nextInt(characters.length())));
-        }
-        String generatedCode = codeBuilder.toString();
-
-        ConnectionCode connectionCode = ConnectionCode.builder()
-                .code(generatedCode)
-                .childId(childId)
-                .expiryDate(LocalDateTime.now().plusMinutes(10))
-                .build();
-        connectionCodeRepository.save(connectionCode);
-        return generatedCode;
+        return connectionCodeService.createCode(childId);
     }
 }

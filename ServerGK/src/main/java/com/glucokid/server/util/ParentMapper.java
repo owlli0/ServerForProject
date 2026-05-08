@@ -8,7 +8,7 @@ import lombok.experimental.UtilityClass;
 public class ParentMapper {
     public ParentDTO convertToDto(Parent parent) {
         ParentDTO dto = new ParentDTO();
-        dto.setId(dto.getId());
+        dto.setId(parent.getId());
         dto.setFirstName(parent.getFirstName());
         dto.setSecondName(parent.getSecondName());
         dto.setLastName(parent.getLastName());

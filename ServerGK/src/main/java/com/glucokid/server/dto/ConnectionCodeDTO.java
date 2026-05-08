@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 
 @Data
 public class ConnectionCodeDTO {
-    private String code;       // Сам код (например, "AX392Z")
-    private Long childId;      // ID ребенка, который его создал
+    private String code;
+    private Long childId;
     private LocalDateTime expiryDate;
 }

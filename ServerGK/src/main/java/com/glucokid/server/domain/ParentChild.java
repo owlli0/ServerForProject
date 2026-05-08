@@ -15,6 +15,7 @@ import lombok.NoArgsConstructor;
 public class ParentChild {
 
     @Id
+    @Column(name = "id_note_pc")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 

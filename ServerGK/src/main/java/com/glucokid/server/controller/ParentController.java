@@ -1,6 +1,7 @@
 package com.glucokid.server.controller;
 
 import com.glucokid.server.domain.Parent;
+import com.glucokid.server.dto.ChildDTO;
 import com.glucokid.server.dto.ParentDTO;
 import com.glucokid.server.service.ParentService;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +22,7 @@ public class ParentController {
         return parentService.getAll();
     }
 
-    @PostMapping("/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<ParentDTO> getById(@PathVariable Long id) {
         return ResponseEntity.ok(parentService.getById(id));
     }
@@ -40,5 +41,16 @@ public class ParentController {
     public ResponseEntity<Void> deleteById(@PathVariable long id) {
         parentService.deleteById(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/{parentId}/connect")
+    public ResponseEntity<String> connectChild(@PathVariable Long parentId, @RequestParam String code) {
+        parentService.connectChild(parentId, code);
+        return ResponseEntity.ok("Ребенок успешно подключен!");
+    }
+
+    @GetMapping("/{parentId}/children")
+    public ResponseEntity<List<ChildDTO>> getMyChildren(@PathVariable Long parentId) {
+        return ResponseEntity.ok(parentService.getMyChildren(parentId));
     }
 }

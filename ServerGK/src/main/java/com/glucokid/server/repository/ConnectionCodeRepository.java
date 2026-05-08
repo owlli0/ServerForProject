@@ -7,4 +7,5 @@ import java.util.Optional;
 
 public interface ConnectionCodeRepository extends JpaRepository<ConnectionCode, Long> {
     Optional<ConnectionCode> findByCode(String code);
+    void deleteByChildId(Long childId);
 }

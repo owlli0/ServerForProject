@@ -10,6 +10,7 @@ import com.glucokid.server.repository.ChildRepository;
 import com.glucokid.server.repository.ConnectionCodeRepository;
 import com.glucokid.server.repository.ParentChildRepository;
 import com.glucokid.server.repository.ParentRepository;
+import com.glucokid.server.service.ConnectionCodeService;
 import com.glucokid.server.service.ParentService;
 import com.glucokid.server.util.ChildMapper;
 import com.glucokid.server.util.ParentMapper;
@@ -28,7 +29,7 @@ public class ParentServiceImpl implements ParentService {
 
     private final ParentRepository parentRepository;
     private final ChildRepository childRepository;
-    private final ConnectionCodeRepository connectionCodeRepository;
+    private final ConnectionCodeService connectionCodeService;
     private final ParentChildRepository parentChildRepository;
 
     @Override
@@ -78,28 +79,18 @@ public class ParentServiceImpl implements ParentService {
     @Override
     @Transactional
     public void connectChild(Long parentId, String code) {
-
-        ConnectionCode connectionCode = connectionCodeRepository.findByCode(code)
-                .orElseThrow(() -> new RuntimeException("Код не найден!"));
-
-        if (connectionCode.getExpiryDate().isBefore(LocalDateTime.now())) {
-            connectionCodeRepository.delete(connectionCode);
-            throw new RuntimeException("Срок действия кода истек!");
-        }
-
+        ConnectionCode connectionCode = connectionCodeService.validateAndGet(code);
         Parent parent = parentRepository.findById(parentId)
                 .orElseThrow(() -> new RuntimeException("Родитель не найден!"));
-
         Child child = childRepository.findById(connectionCode.getChildId())
                 .orElseThrow(() -> new RuntimeException("Ребенок не найден!"));
-
         ParentChild link = ParentChild.builder()
                 .parent(parent)
                 .child(child)
                 .build();
 
         parentChildRepository.save(link);
-        connectionCodeRepository.delete(connectionCode);
+        connectionCodeService.remove(connectionCode);
     }
 
     @Override
