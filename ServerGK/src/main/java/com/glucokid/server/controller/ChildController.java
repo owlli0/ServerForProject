@@ -48,8 +48,8 @@ public class ChildController {
         return ResponseEntity.ok(code);
     }
 
-    @PostMapping("/login")
-    public ResponseEntity<ChildDTO> login(@RequestParam String phoneNumber, @RequestParam String password) {
-        return ResponseEntity.ok(childService.login(phoneNumber, password));
+    @PostMapping("/login")public ResponseEntity<ChildDTO> login(@RequestBody ChildDTO childDTO) {
+        return ResponseEntity.ok(childService.login(childDTO.getPhoneNumber(), childDTO.getPassword()));
     }
+
 }
