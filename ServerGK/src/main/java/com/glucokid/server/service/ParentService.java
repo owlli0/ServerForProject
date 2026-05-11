@@ -15,4 +15,5 @@ public interface ParentService {
     void deleteById(Long id);
     void connectChild(Long parentId, String code);
     List<ChildDTO> getMyChildren(Long parentId);
+    ParentDTO login(String phoneNumber, String password);
 }

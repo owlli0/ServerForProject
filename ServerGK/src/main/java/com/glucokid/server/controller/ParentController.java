@@ -53,4 +53,9 @@ public class ParentController {
     public ResponseEntity<List<ChildDTO>> getMyChildren(@PathVariable Long parentId) {
         return ResponseEntity.ok(parentService.getMyChildren(parentId));
     }
+
+    @PostMapping("/login")
+    public ResponseEntity<ParentDTO> login(@RequestParam String phoneNumber, @RequestParam String password) {
+        return ResponseEntity.ok(parentService.login(phoneNumber, password));
+    }
 }

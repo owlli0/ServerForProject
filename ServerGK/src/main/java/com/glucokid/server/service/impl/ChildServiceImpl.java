@@ -76,4 +76,11 @@ public class ChildServiceImpl implements ChildService {
         }
         return connectionCodeService.createCode(childId);
     }
+
+    @Override
+    public ChildDTO login(String phoneNumber, String password) {
+        return childRepository.findByPhoneNumberAndPassword(phoneNumber, password)
+                .map(ChildMapper::convertToDto)
+                .orElseThrow(() -> new RuntimeException("Неверный телефон или пароль ребенка"));
+    }
 }

@@ -107,4 +107,11 @@ public class ParentServiceImpl implements ParentService {
 
         return childrenDtos;
     }
+
+    @Override
+    public ParentDTO login(String phoneNumber, String password) {
+        return parentRepository.findByPhoneNumberAndPassword(phoneNumber, password)
+                .map(ParentMapper::convertToDto)
+                .orElseThrow(() -> new RuntimeException("Неверный телефон или пароль родителя"));
+    }
 }

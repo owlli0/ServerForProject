@@ -13,6 +13,6 @@ public interface ChildService {
     void deleteById(Long id);
 
     String generateConnectionCode(Long childId);
-
+    ChildDTO login(String phoneNumber, String password);
 
 }

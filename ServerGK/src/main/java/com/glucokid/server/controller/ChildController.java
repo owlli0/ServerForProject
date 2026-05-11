@@ -47,4 +47,9 @@ public class ChildController {
         String code = childService.generateConnectionCode(childId);
         return ResponseEntity.ok(code);
     }
+
+    @PostMapping("/login")
+    public ResponseEntity<ChildDTO> login(@RequestParam String phoneNumber, @RequestParam String password) {
+        return ResponseEntity.ok(childService.login(phoneNumber, password));
+    }
 }
