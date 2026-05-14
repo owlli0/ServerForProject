@@ -30,6 +30,7 @@ public class ParentServiceImpl implements ParentService {
     private final ParentRepository parentRepository;
     private final ChildRepository childRepository;
     private final ConnectionCodeService connectionCodeService;
+    private final ConnectionCodeRepository connectionCodeRepository;
     private final ParentChildRepository parentChildRepository;
 
     @Override
@@ -78,19 +79,29 @@ public class ParentServiceImpl implements ParentService {
 
     @Override
     @Transactional
-    public void connectChild(Long parentId, String code) {
-        ConnectionCode connectionCode = connectionCodeService.validateAndGet(code);
+    public ChildDTO connectChild(Long parentId, String code) {
         Parent parent = parentRepository.findById(parentId)
-                .orElseThrow(() -> new RuntimeException("Родитель не найден!"));
+                .orElseThrow(() -> new RuntimeException("Родитель не найден"));
+
+        ConnectionCode connectionCode = connectionCodeRepository.findByCode(code)
+                .orElseThrow(() -> new RuntimeException("Неверный код подключения"));
+
+        if (connectionCode.getExpiryDate().isBefore(LocalDateTime.now())) {
+            throw new RuntimeException("Срок действия кода истек");
+        }
+
         Child child = childRepository.findById(connectionCode.getChildId())
-                .orElseThrow(() -> new RuntimeException("Ребенок не найден!"));
-        ParentChild link = ParentChild.builder()
+                .orElseThrow(() -> new RuntimeException("Ребенок не найден в базе"));
+
+        ParentChild relation = ParentChild.builder()
                 .parent(parent)
                 .child(child)
                 .build();
+        parentChildRepository.save(relation);
 
-        parentChildRepository.save(link);
-        connectionCodeService.remove(connectionCode);
+        connectionCodeRepository.delete(connectionCode);
+
+        return ChildMapper.convertToDto(child);
     }
 
     @Override

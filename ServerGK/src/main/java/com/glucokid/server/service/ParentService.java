@@ -13,7 +13,7 @@ public interface ParentService {
     ParentDTO getById(Long id);
     ParentDTO update(Long id, ParentDTO dto);
     void deleteById(Long id);
-    void connectChild(Long parentId, String code);
+    ChildDTO connectChild(Long parentId, String code);
     List<ChildDTO> getMyChildren(Long parentId);
     ParentDTO login(String phoneNumber, String password);
 }

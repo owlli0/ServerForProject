@@ -44,10 +44,11 @@ public class ParentController {
     }
 
     @PostMapping("/{parentId}/connect")
-    public ResponseEntity<String> connectChild(@PathVariable Long parentId, @RequestParam String code) {
-        parentService.connectChild(parentId, code);
-        return ResponseEntity.ok("Ребенок успешно подключен!");
+    public ResponseEntity<ChildDTO> connectChild(@PathVariable Long parentId, @RequestParam String code) {
+        ChildDTO connectedChild = parentService.connectChild(parentId, code);
+        return ResponseEntity.ok(connectedChild);
     }
+
 
     @GetMapping("/{parentId}/children")
     public ResponseEntity<List<ChildDTO>> getMyChildren(@PathVariable Long parentId) {
