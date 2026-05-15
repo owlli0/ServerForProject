@@ -1,6 +1,7 @@
 spring:
   datasource:
-    url: jdbc:h2:mem:testdb
+    url: jdbc:h2:mem:testdb;NON_KEYWORDS=VALUE
+    #url: jdbc:h2:mem:testdb
 #СУБД
   h2:
     console:

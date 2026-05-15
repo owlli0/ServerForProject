@@ -1,7 +1,9 @@
 package com.glucokid.server.service.impl;
 
+import com.glucokid.server.domain.Child;
 import com.glucokid.server.domain.SugarLevel;
 import com.glucokid.server.dto.SugarLevelDTO;
+import com.glucokid.server.repository.ChildRepository;
 import com.glucokid.server.repository.SugarLevelRepository;
 import com.glucokid.server.service.SugarLevelService;
 import com.glucokid.server.util.SugarLevelMapper;
@@ -17,12 +19,22 @@ public class SugarLevelServiceImpl implements SugarLevelService {
 
     private final SugarLevelRepository sugarLevelRepository;
 
+    private final ChildRepository childRepository;
+
     @Override
     public SugarLevelDTO add(SugarLevelDTO dto) {
         SugarLevel sugarLevel = SugarLevelMapper.convertToEntity(dto);
+
+        if (dto.getChildId() != null) {
+            Child child = childRepository.findById(dto.getChildId())
+                    .orElseThrow(() -> new RuntimeException("Ребенок не найден!"));
+            sugarLevel.setChild(child);
+        }
+
         if (sugarLevel.getTime() == null) {
             sugarLevel.setTime(java.time.LocalDateTime.now());
         }
+
         return SugarLevelMapper.convertToDto(sugarLevelRepository.save(sugarLevel));
     }
 
