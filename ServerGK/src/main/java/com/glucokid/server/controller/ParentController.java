@@ -58,4 +58,12 @@ public class ParentController {
     @PostMapping("/login")public ResponseEntity<ParentDTO> login(@RequestBody ParentDTO parentDTO) {
         return ResponseEntity.ok(parentService.login(parentDTO.getPhoneNumber(), parentDTO.getPassword()));
     }
+
+    @DeleteMapping("/{parentId}/disconnect/{childId}")
+    public ResponseEntity<String> disconnectChild(
+            @PathVariable Long parentId,
+            @PathVariable Long childId) {
+        parentService.disconnectChild(parentId, childId);
+        return ResponseEntity.ok("Ребенок успешно отвязан!");
+    }
 }

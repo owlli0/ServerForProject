@@ -16,4 +16,5 @@ public interface ParentService {
     ChildDTO connectChild(Long parentId, String code);
     List<ChildDTO> getMyChildren(Long parentId);
     ParentDTO login(String phoneNumber, String password);
+    void disconnectChild(Long parentId, Long childId);
 }

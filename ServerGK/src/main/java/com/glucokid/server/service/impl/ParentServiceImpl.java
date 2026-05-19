@@ -125,4 +125,12 @@ public class ParentServiceImpl implements ParentService {
                 .map(ParentMapper::convertToDto)
                 .orElseThrow(() -> new RuntimeException("Неверный телефон или пароль родителя"));
     }
+
+    @Override
+    @Transactional
+    public void disconnectChild(Long parentId, Long childId) {
+        ParentChild relation = parentChildRepository.findByParentIdAndChildId(parentId, childId)
+                .orElseThrow(() -> new RuntimeException("Связь между этим родителем и ребенком не найдена"));
+        parentChildRepository.delete(relation);
+    }
 }
