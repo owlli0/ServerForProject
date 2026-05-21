@@ -55,11 +55,21 @@ public class ChildServiceImpl implements ChildService {
         Child child = childRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Child with ID " + id + " not found"));
 
-        child.setFirstName(dto.getFirstName());
-        child.setSecondName(dto.getSecondName());
-        child.setLastName(dto.getLastName());
-        child.setPhoneNumber(dto.getPhoneNumber());
-
+        if (dto.getFirstName() != null) {
+            child.setFirstName(dto.getFirstName());
+        }
+        if (dto.getSecondName() != null) {
+            child.setSecondName(dto.getSecondName());
+        }
+        if (dto.getLastName() != null) {
+            child.setLastName(dto.getLastName());
+        }
+        if (dto.getPhoneNumber() != null) {
+            child.setPhoneNumber(dto.getPhoneNumber());
+        }
+        if (dto.getPassword() != null) {
+            child.setPassword(dto.getPassword());
+        }
         return ChildMapper.convertToDto(childRepository.save(child));
     }
 
